@@ -6,31 +6,25 @@ pipeline {
     }
 
     stages {
-        stage('Cloner le projet') {
-            steps {
-                echo 'Projet MyAppReact disponible'
-                checkout scm
-            }
-        }
-
         stage('Verifier les fichiers') {
             steps {
-                sh 'ls -la'
-                sh 'test -f Client/Dockerfile'
-                sh 'test -f Server/Dockerfile'
-                sh 'test -f docker-compose.yml'
+                bat 'dir'
+                bat 'if not exist Client\\Dockerfile exit /b 1'
+                bat 'if not exist Server\\Dockerfile exit /b 1'
+                bat 'if not exist docker-compose.yml exit /b 1'
+                echo 'Tous les fichiers existent'
             }
         }
 
         stage('Construire image serveur') {
             steps {
-                sh 'docker build -t mern-server ./Server'
+                bat 'docker build -t mern-server ./Server'
             }
         }
 
         stage('Construire image client') {
             steps {
-                sh 'docker build -t mern-client ./Client'
+                bat 'docker build -t mern-client ./Client'
             }
         }
 
